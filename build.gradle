@@ -2,14 +2,43 @@ group 'com.wyl'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'war'
 
 sourceCompatibility = 1.8
 
+// 添加一些属性到JAR包的manifest文件中
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+    }
+}
+
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-beans', version: '4.3.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-core', version: '4.3.2.RELEASE'
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+// 修改test任务来添加系统属性
+test {
+    systemProperties 'property': 'value'
+}
+
+// 发布JAR包到本地中(发布到maven仓库或jcenter仓库研究)
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
 }
